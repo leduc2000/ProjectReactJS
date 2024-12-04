@@ -142,3 +142,162 @@ function getBooks() {
 function getBook(id) {
   return data.find((d) => d.id === id);
 }
+
+// ------------Destructuring----------------
+/*
+const book = getBook(3);
+book;
+const { title, publicationDate, author, genres, pages, hasMovieAdaptation } =
+  book;
+//console.log(title, publicationDate, author, genres);
+
+//
+const [primaryGenre, secondGenre, ...otherGenre] = genres;
+//console.log(primaryGenre, secondGenre, otherGenre);
+
+//
+const newGenre = ["epic fantasy", ...genres];
+//newGenre;
+
+//
+const updateBook = {
+  ...book,
+  // Adding a new property
+  movieDate: "2001-12-19",
+  // Overwriting an existing property
+  pages: 1210,
+};
+//updateBook;
+
+//
+const summary = `Movie ${title} is by ${author} in ${
+  publicationDate.split("-")[0]
+}`;
+//summary;
+
+// Arrow function
+const getYear = (str) => str.split("-")[0];
+console.log(getYear(publicationDate));
+
+// toán tử 3 ngôi
+const pageRange = pages > 1000 ? "over thousand" : "less than thounsan";
+//pageRange;
+console.log(`The book has ${pageRange} pages`);
+
+// Short-Circuiting: đoản mạch
+console.log(true && "something");
+console.log(false && "something");
+console.log(hasMovieAdaptation && "This book has movie");
+
+// falsy: 0, '', null, undefined
+console.log("ok" && "something");
+console.log("" && "something");
+
+console.log(true || "something");
+console.log(false || "something");
+
+console.log(book.translations.spanish);
+const spanishTranslate = book.translations.spanish || "NOT TRANSLATE";
+spanishTranslate;
+
+// console.log(book.reviews.librarything.reviewsCount);
+// const countWrong = book.reviews.librarything.reviewsCount || "No data";
+// countWrong;
+// nullish (0 && null)
+// count = book.reviews.librarything.reviewsCount ?? "No data";
+// count;
+
+// toán tử hợp nhất null (??), (?) có thể tồn tại dữ liệu hoặc không
+function getTotalReviewCount(book) {
+  const goodreads = book.reviews.goodreads.reviewsCount;
+  const librarything = book.reviews.librarything?.reviewsCount ?? 0;
+  return goodreads + librarything;
+}
+
+console.log(getTotalReviewCount(book));
+
+*/
+
+// ------------Map, Filter, Reduce, Sort (add, del, update)-----------
+/*
+const books = getBooks();
+
+// Map: tạo ra 1 mảng mới dựa vào đối tượng hoặc mảng cũ
+const x = [1, 2, 3, 4, 5].map((el) => el * 2);
+//console.log(x);
+
+const title = books.map((book) => book.title);
+//title;
+
+function getTotalReviewCount(book) {
+  const goodreads = book.reviews.goodreads.reviewsCount;
+  const librarything = book.reviews.librarything?.reviewsCount ?? 0;
+  return goodreads + librarything;
+}
+
+const essentialData = books.map((book) => ({
+  title: book.title,
+  author: book.author,
+  reviewsCount: getTotalReviewCount(book),
+}));
+essentialData;
+
+// Filter: Lọc ra phần tử của mảng dựa trên một điều kiện
+const longBooksWithMovie = books
+  .filter((book) => book.pages > 500)
+  .filter((book) => book.hasMovieAdaptation);
+longBooksWithMovie;
+
+const adventureBooks = books
+  .filter((book) => book.genres.includes("adventure"))
+  .map((book) => book.title);
+adventureBooks;
+
+// Reduce: Phương pháp rút rọn, giảm toàn bộ mảng xuống thành một giá trị
+const pagesAllBooks = books.reduce((sum, book) => sum + book.pages, 0);
+pagesAllBooks;
+
+// Sort: phương thức sắp xếp => thay đổi mảng hiện tại khác vs Map và Filter, Slice(): tạo mảng copy
+const arr = [1, 8, 6, 7, 4, 2, 9];
+const sorted = arr.slice().sort((a, b) => a - b);
+sorted;
+arr;
+
+const sortByPageBooks = books.slice().sort((a, b) => a.pages - b.pages);
+sortByPageBooks;
+
+// Working With Immutable Arrays: Làm việc (del và update) với mảng không thay đổi
+// 1) Add book object to array
+const newBook = {
+  id: 6,
+  title: "Harry Margui is legend",
+  author: "Ten Hag",
+};
+
+const booksAfterAdd = [...books, newBook];
+booksAfterAdd;
+
+// 2. Del book object from array
+const booksAfterDel = books.filter((book) => book.id !== 3);
+booksAfterDel;
+
+// 3. Update book object
+const booksAfterUpdate = booksAfterDel.map((book) =>
+  book.id === 1 ? {...book, pages: 1250} : book
+);
+booksAfterUpdate;
+*/
+
+// ------------Promise, Đồng bộ và Bất đồng bộ-------------------------
+// fetch("https://jsonplaceholder.typicode.com/todos")
+//   .then((res) => res.json())
+//   .then((data) => console.log(data));
+
+async function getTodos() {
+  const res = await fetch("https://jsonplaceholder.typicode.com/todos");
+  const data = await res.json();
+  console.log(data);
+}
+
+getTodos();
+console.log("First after getTodos()")
