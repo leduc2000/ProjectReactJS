@@ -47,36 +47,9 @@ const pizzaData = [
   },
 ];
 
-function Header() {
-  return <h1>Fast React Pizza Co.</h1>;
-}
-
-function Menu() {
-  return (
-    <div>
-      <h2>Our menu</h2>
-      <Pizza />
-      <Pizza />
-      <Pizza />
-      <Pizza />
-    </div>
-  );
-}
-
-function Footer() {
-  const hour = new Date().getHours();
-  const hourOpen = 8
-  const hourClose = 22
-  const isOpen = (hour >= hourOpen && hour <= hourClose) ? true : false;
-  console.log(isOpen)
-  return (
-    <footer>{new Date().toLocaleTimeString()}. We're currently open</footer>
-  );
-}
-
 function App() {
   return (
-    <div>
+    <div className="container">
       <Header />
       <Menu />
       <Footer />
@@ -84,13 +57,87 @@ function App() {
   );
 }
 
-function Pizza() {
+function Header() {
+  // const style = { color: "red", fontSize: "48px", textTransform: "uppercase" };
+  const style = {};
+
   return (
-    <div>
-      <img src="pizzas/spinaci.jpg" alt="Pizza Spinaci"></img>
-      <h2>Pizza Spinaci</h2>
-      <p>Tomato, mozarella, spinach, and ricotta cheese</p>
+    <header className="header">
+      <h1 style={style}>Fast React Pizza Co.</h1>
+    </header>
+  );
+}
+
+function Menu() {
+  const pizza = pizzaData;
+  // const pizza = [];
+  const numPizzas = pizza.length;
+
+  return (
+    <main className="menu">
+      <h2>Our menu</h2>
+
+      {numPizzas > 0 ? (
+        <>
+          <p>
+            Authentic Italian cuisine. 6 creative dishes to choose from. All
+            from our stone oven, all organic, all delicious.
+          </p>
+          <ul className="pizzas">
+            {pizzaData.map((pizza) => (
+              <Pizza pizzaObj={pizza} key={pizza.name} />
+            ))}
+          </ul>
+        </>
+      ) : (
+        <p>We're still working on our menu. Please come back later :) </p>
+      )}
+    </main>
+  );
+}
+
+function Footer() {
+  const hour = new Date().getHours();
+  const openHour = 8;
+  const closeHour = 22;
+  const isOpen = hour >= openHour && hour <= closeHour ? true : false;
+  console.log(isOpen);
+
+  return (
+    <footer className="footer">
+      {isOpen ? (
+        <Order closeHours={closeHour} openHours={openHour} />
+      ) : (
+        <p>
+          We're happy to welcome you between {openHour}:00 and {closeHour}:00
+        </p>
+      )}
+    </footer>
+  );
+}
+
+function Order({ closeHours, openHours }) {
+  return (
+    <div className="order">
+      <p>
+        We're open from {openHours} to {closeHours}:00. Come visit us or order
+        online
+      </p>
+      <button className="btn">Order</button>
     </div>
+  );
+}
+
+function Pizza({ pizzaObj }) {
+  return (
+    <li className={`pizza ${pizzaObj.soldOut ? 'sold-out' : ''}`}>
+      <img src={pizzaObj.photoName} alt={pizzaObj.name}></img>
+      <div>
+        <h3>{pizzaObj.name}</h3>
+        <p>{pizzaObj.ingredients}</p>
+        <span>{pizzaObj.soldOut ? "SOLDOUT" : pizzaObj.price}</span>
+      </div>
+    </li>
   );
 }
 
